@@ -2,7 +2,7 @@
 
 A simple web application that analyzes the sentiment of text input using TextBlob.
 
-## Setup
+## Local Setup
 
 1. Install the required dependencies:
    ```
@@ -14,7 +14,7 @@ A simple web application that analyzes the sentiment of text input using TextBlo
    python -c "import nltk; nltk.download('punkt'); nltk.download('averaged_perceptron_tagger')"
    ```
 
-## Running the Application
+## Running the Application Locally
 
 1. Start the Flask application:
    ```
@@ -25,6 +25,44 @@ A simple web application that analyzes the sentiment of text input using TextBlo
    ```
    http://127.0.0.1:5000/
    ```
+
+## Deployment Options
+
+### Vercel Deployment
+
+1. Install Vercel CLI:
+   ```
+   npm install -g vercel
+   ```
+
+2. Deploy to Vercel:
+   ```
+   vercel login
+   vercel
+   ```
+
+### Heroku Deployment
+
+1. Create a `Procfile` in the project root:
+   ```
+   web: gunicorn app:app
+   ```
+
+2. Add `gunicorn` to `requirements.txt`
+
+3. Deploy with Heroku CLI:
+   ```
+   heroku create
+   git push heroku main
+   ```
+
+### Other Cloud Platforms
+
+The application can be deployed to other platforms that support Python:
+
+- **Google Cloud Run**: Build a container with a Dockerfile
+- **AWS Lambda**: Use Zappa or AWS Chalice
+- **Azure App Service**: Deploy directly from repository
 
 ## Usage
 

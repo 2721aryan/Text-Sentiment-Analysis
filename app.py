@@ -28,5 +28,9 @@ def index():
 def about():
     return render_template('index.html', active_page='about')
 
+# This is for local development
 if __name__ == '__main__':
-    app.run(debug=True) 
+    app.run(debug=True)
+    
+# For serverless deployments
+app = app 
