@@ -30,7 +30,7 @@ A simple web application that analyzes the sentiment of text input using TextBlo
 
 ### Vercel Deployment
 
-1. Install Vercel CLI:
+1. Make sure you have the Vercel CLI installed:
    ```
    npm install -g vercel
    ```
@@ -40,6 +40,11 @@ A simple web application that analyzes the sentiment of text input using TextBlo
    vercel login
    vercel
    ```
+
+3. Troubleshooting Vercel Deployment:
+   - If you encounter 500 errors, check the Vercel logs in your dashboard
+   - Ensure NLTK data is properly downloaded by the build process
+   - The files `vercel.json`, `requirements-vercel.txt`, and `nltk.txt` are specifically for Vercel deployment
 
 ### Heroku Deployment
 
@@ -63,6 +68,7 @@ The application can be deployed to other platforms that support Python:
 - **Google Cloud Run**: Build a container with a Dockerfile
 - **AWS Lambda**: Use Zappa or AWS Chalice
 - **Azure App Service**: Deploy directly from repository
+- **Render.com**: Simple deployment with support for Python web services
 
 ## Usage
 
