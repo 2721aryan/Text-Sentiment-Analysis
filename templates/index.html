@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Sentiment Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;700&display=swap">
+</head>
+<body>
+    <header class="header">
+        <a href="/" class="logo">Aryan</a>
+        <nav class="nav-tabs">
+            <a href="/" class="nav-tab {% if active_page == 'home' %}active{% endif %}">Home</a>
+            <a href="/about" class="nav-tab {% if active_page == 'about' %}active{% endif %}">About</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="main-content">
+            {% if active_page == 'home' %}
+                <h1>Text Sentiment Analysis</h1>
+                <div class="card">
+                    <form method="POST" action="/">
+                        <div class="form-group">
+                            <label for="text">Enter your text for sentiment analysis:</label>
+                            <textarea id="text" name="text" rows="6" required></textarea>
+                        </div>
+                        <button type="submit" class="btn">Analyze</button>
+                    </form>
+                    
+                    {% if result %}
+                    <div class="result-box {% if result == 'Positive' %}positive{% elif result == 'Negative' %}negative{% else %}neutral{% endif %}">
+                        <h2>Result: {{ result }}</h2>
+                        <p>Sentiment score: {{ sentiment_value }}</p>
+                        <p class="info">The sentiment score ranges from -1 (very negative) to 1 (very positive)</p>
+                    </div>
+                    {% endif %}
+                </div>
+            {% elif active_page == 'about' %}
+                <h1>About This Project</h1>
+                <div class="card about-section">
+                    <h2>Project Overview</h2>
+                    <p>This Text Sentiment Analysis web application analyzes the emotional tone of text input. It categorizes text as positive, negative, or neutral based on its content using natural language processing.</p>
+                    
+                    <h2>How It Works</h2>
+                    <p>The application uses TextBlob, a Python library for processing textual data, to analyze the sentiment of user-provided text. It calculates a polarity score between -1 (very negative) and 1 (very positive), with 0 being neutral.</p>
+                    
+                    <h2>Project Files</h2>
+                    
+                    <div class="file-card">
+                        <h3>app.py</h3>
+                        <p>The main Flask application file that handles routing, processes form submissions, and performs sentiment analysis using TextBlob.</p>
+                    </div>
+                    
+                    <div class="file-card">
+                        <h3>templates/index.html</h3>
+                        <p>The HTML template that provides the structure for the web interface, including the form for user input and the display of analysis results.</p>
+                    </div>
+                    
+                    <div class="file-card">
+                        <h3>static/css/style.css</h3>
+                        <p>The CSS file that defines the dark-themed styling and layout of the application, including responsive design for different screen sizes.</p>
+                    </div>
+                    
+                    <div class="file-card">
+                        <h3>requirements.txt</h3>
+                        <p>Lists all the Python dependencies required for the application to run, including Flask and TextBlob.</p>
+                    </div>
+                    
+                    <h2>Technologies Used</h2>
+                    <p>This application uses Flask for the backend, HTML and CSS for the frontend, and TextBlob for natural language processing and sentiment analysis.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html> 
