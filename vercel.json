@@ -1,24 +1,28 @@
 {
     "version": 2,
-    "builds": [
-        {
-            "src": "api/index.py",
-            "use": "@vercel/python"
+    "buildCommand": "pip install textblob==0.15.3 nltk==3.6.2 && python -c \"import nltk; nltk.download('punkt'); nltk.download('averaged_perceptron_tagger')\"",
+    "functions": {
+        "api/index.py": {
+            "memory": 1024,
+            "maxDuration": 10
         },
-        {
-            "src": "static/**",
-            "use": "@vercel/static"
+        "api/about.py": {
+            "memory": 512,
+            "maxDuration": 10
         }
-    ],
+    },
     "routes": [
         {
-            "src": "/static/(.*)",
-            "dest": "/static/$1"
+            "src": "/css/(.*)",
+            "dest": "/public/css/$1"
+        },
+        {
+            "src": "/about",
+            "dest": "/api/about.py"
         },
         {
             "src": "/(.*)",
             "dest": "/api/index.py"
         }
-    ],
-    "installCommand": "pip install flask==2.0.1 textblob==0.15.3 nltk==3.6.2 && python -c \"import nltk; nltk.download('punkt'); nltk.download('averaged_perceptron_tagger')\""
+    ]
 } 

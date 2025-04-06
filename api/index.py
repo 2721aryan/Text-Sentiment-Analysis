@@ -1,24 +1,57 @@
-from flask import Flask, render_template, request
+from http.server import BaseHTTPRequestHandler
 from textblob import TextBlob
+import json
 import os
-import sys
-import importlib.util
+import urllib.parse
+import nltk
 
-# Add the parent directory to the path so we can access templates
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Ensure nltk data is available
+try:
+    nltk.data.find('tokenizers/punkt')
+except LookupError:
+    nltk.download('punkt')
 
-# Initialize Flask app
-app = Flask(__name__, 
-            template_folder='../templates',
-            static_folder='../static')
+try:
+    nltk.data.find('taggers/averaged_perceptron_tagger')
+except LookupError:
+    nltk.download('averaged_perceptron_tagger')
 
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    result = None
-    sentiment_value = None
+# Read HTML template
+with open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'templates', 'index.html'), 'r') as f:
+    html_template = f.read()
+
+class handler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        # Serve the static HTML page
+        try:
+            public_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'public')
+            if self.path == '/':
+                with open(os.path.join(public_dir, 'index.html'), 'rb') as f:
+                    self.send_response(200)
+                    self.send_header('Content-type', 'text/html')
+                    self.end_headers()
+                    self.wfile.write(f.read())
+            else:
+                self.send_response(404)
+                self.send_header('Content-type', 'text/plain')
+                self.end_headers()
+                self.wfile.write(b'Not found')
+        except Exception as e:
+            self.send_response(500)
+            self.send_header('Content-type', 'text/plain')
+            self.end_headers()
+            self.wfile.write(str(e).encode())
+        return
     
-    if request.method == 'POST':
-        text = request.form['text']
+    def do_POST(self):
+        content_length = int(self.headers['Content-Length'])
+        post_data = self.rfile.read(content_length).decode('utf-8')
+        form_data = urllib.parse.parse_qs(post_data)
+        
+        text = form_data.get('text', [''])[0]
+        result = None
+        sentiment_value = None
+        
         try:
             blob = TextBlob(text)
             sentiment = blob.sentiment.polarity
@@ -32,17 +65,18 @@ def index():
             else:
                 result = "Neutral"
         except Exception as e:
-            # Simple error handling
             result = "Error analyzing text"
             sentiment_value = str(e)
-    
-    return render_template('index.html', result=result, sentiment_value=sentiment_value, active_page='home')
-
-@app.route('/about')
-def about():
-    return render_template('index.html', active_page='about')
-
-# For Vercel serverless
-def handler(request, context):
-    with app.request_context(request):
-        return app(request) 
+        
+        # Return JSON response
+        self.send_response(200)
+        self.send_header('Content-type', 'application/json')
+        self.end_headers()
+        
+        response = {
+            'result': result,
+            'sentiment_value': sentiment_value
+        }
+        
+        self.wfile.write(json.dumps(response).encode())
+        return 
