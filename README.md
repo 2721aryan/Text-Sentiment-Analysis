@@ -35,16 +35,38 @@ A simple web application that analyzes the sentiment of text input using TextBlo
    npm install -g vercel
    ```
 
-2. Deploy to Vercel:
+2. Deploy to Vercel using one of these methods:
+   
+   **Option A: Deploy from GitHub**
+   - Push your code to GitHub
+   - Import the repository in the Vercel dashboard
+   - Vercel will detect the configuration and deploy automatically
+   
+   **Option B: Deploy from CLI**
    ```
    vercel login
    vercel
    ```
 
-3. Troubleshooting Vercel Deployment:
-   - If you encounter 500 errors, check the Vercel logs in your dashboard
-   - Ensure NLTK data is properly downloaded by the build process
-   - The files `vercel.json`, `requirements-vercel.txt`, and `nltk.txt` are specifically for Vercel deployment
+3. **IMPORTANT: Troubleshooting Vercel Deployment**
+   
+   If you're still seeing 500 errors:
+   - Use the "Preview" feature to understand the error
+   - Check your function logs in the Vercel dashboard
+   - Try deploying only the `/api` directory:
+     ```
+     vercel --cwd api
+     ```
+   - Consider pushing your entire project to GitHub and importing it in Vercel
+
+### Alternative: Render.com Deployment (Recommended for Python)
+
+1. Create a free account on [Render.com](https://render.com)
+2. Choose "New Web Service" and connect your GitHub repository
+3. Configure as a Python app with:
+   - Build Command: `pip install -r requirements.txt && python download_nltk.py`
+   - Start Command: `gunicorn app:app`
+4. Deploy and your app will be live in minutes
 
 ### Heroku Deployment
 
@@ -60,15 +82,6 @@ A simple web application that analyzes the sentiment of text input using TextBlo
    heroku create
    git push heroku main
    ```
-
-### Other Cloud Platforms
-
-The application can be deployed to other platforms that support Python:
-
-- **Google Cloud Run**: Build a container with a Dockerfile
-- **AWS Lambda**: Use Zappa or AWS Chalice
-- **Azure App Service**: Deploy directly from repository
-- **Render.com**: Simple deployment with support for Python web services
 
 ## Usage
 

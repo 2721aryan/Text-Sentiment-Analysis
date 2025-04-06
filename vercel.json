@@ -2,18 +2,23 @@
     "version": 2,
     "builds": [
         {
-            "src": "app.py",
+            "src": "api/index.py",
             "use": "@vercel/python"
+        },
+        {
+            "src": "static/**",
+            "use": "@vercel/static"
         }
     ],
     "routes": [
         {
+            "src": "/static/(.*)",
+            "dest": "/static/$1"
+        },
+        {
             "src": "/(.*)",
-            "dest": "/app.py"
+            "dest": "/api/index.py"
         }
     ],
-    "env": {
-        "NLTK_DATA": "/tmp/nltk_data"
-    },
-    "buildCommand": "pip install -r requirements-vercel.txt && python -c \"import nltk; nltk.download('punkt', download_dir='/tmp/nltk_data'); nltk.download('averaged_perceptron_tagger', download_dir='/tmp/nltk_data')\""
+    "installCommand": "pip install flask==2.0.1 textblob==0.15.3 nltk==3.6.2 && python -c \"import nltk; nltk.download('punkt'); nltk.download('averaged_perceptron_tagger')\""
 } 
