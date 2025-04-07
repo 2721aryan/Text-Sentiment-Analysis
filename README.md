@@ -35,3 +35,7 @@ A simple web application that analyzes the sentiment of text input using TextBlo
 ## About
 
 The sentiment analysis is performed using TextBlob, which returns a polarity score between -1 (very negative) and 1 (very positive). A score of 0 is considered neutral. 
+
+## To watch how this works visit :
+
+https://text-sentiment-analysis-55dp.onrender.com/
