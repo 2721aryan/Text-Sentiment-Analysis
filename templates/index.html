@@ -37,30 +37,6 @@
                     </div>
                     {% endif %}
                 </div>
-                
-                <!-- History Section -->
-                {% if history and history|length > 0 %}
-                <div class="history-section">
-                    <div class="history-header">
-                        <h2>Analysis History</h2>
-                        <a href="/clear-history" class="clear-btn">Clear</a>
-                    </div>
-                    <div class="history-list">
-                        {% for item in history %}
-                        <div class="history-item">
-                            <div class="history-item-header">
-                                <span class="history-timestamp">{{ item.timestamp }}</span>
-                                <span class="history-sentiment {% if item.result == 'Positive' %}positive-text{% elif item.result == 'Negative' %}negative-text{% else %}neutral-text{% endif %}">
-                                    {{ item.result }} ({{ item.sentiment_value }})
-                                </span>
-                            </div>
-                            <div class="history-text">{{ item.text }}</div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-                {% endif %}
-                
             {% elif active_page == 'about' %}
                 <h1>About This Project</h1>
                 <div class="card about-section">
