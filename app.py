@@ -2,9 +2,18 @@ from flask import Flask, render_template, request, session
 from textblob import TextBlob
 from datetime import datetime
 import os
+from flask_session import Session
 
 app = Flask(__name__)
-app.secret_key = os.urandom(24)  # Secret key for sessions
+# Secret key from environment variable with fallback
+app.secret_key = os.environ.get('SECRET_KEY', 'text_sentiment_analysis_secret_key')
+
+# Configure Flask-Session
+app.config["SESSION_TYPE"] = "filesystem"
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_USE_SIGNER"] = True
+app.config["SESSION_FILE_DIR"] = os.path.join(os.getcwd(), "flask_session")
+Session(app)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -62,4 +71,6 @@ def clear_history():
     return render_template('index.html', active_page='home', history=[])
 
 if __name__ == '__main__':
-    app.run(debug=True) 
+    # Use PORT environment variable if available (for cloud deployment)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=False) 
